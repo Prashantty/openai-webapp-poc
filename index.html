@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI Demo App</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 57vh;
+            margin: 10%;
+        }
+        .heading {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .chat-container {
+            flex: 1;
+            overflow-y: scroll;
+            padding: 1rem;
+        }
+        .chat-message {
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: #ddd;
+            align-self: flex-start;
+        }
+        .ai-response {
+            background-color: #95c2cf;
+            align-self: flex-end;
+        }
+        .message-input {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .send-button {
+            padding: 0.5rem 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="heading">OpenAI Demo App</h1>
+    <div class="chat-container">
+        </div>
+    <div class="message-area">
+        <input type="text" id="message-input" class="message-input" placeholder="Type your message">
+        <button id="send-button" class="send-button">Send</button>
+    </div>
+    <script>
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const chatContainer = document.querySelector('.chat-container');
+
+        sendButton.addEventListener('click', function() {
+            const message = messageInput.value;
+          
+
+            messageInput.value = '';
+            console.log(" function runnig !!")
+            fetch('https://opanai-poc.azurewebsites.net/api/http_trigger?code=eKkEELuJ-Zw0fcxX1_RblD7UtcdiqAq9WXntQhVTfuz3AzFuNQVuQw==', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' // Adjust headers as needed
+                },
+                body: JSON.stringify({ message: message }) // Replace with appropriate data format
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the API response and display it in the chat container
+                console.log(data);
+                const responseMessage = document.createElement('div');
+                responseMessage.classList.add('ai-response');
+                responseMessage.textContent = data.response; // Replace with how you access the response data
+                chatContainer.appendChild(responseMessage);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle any errors during the API call
+            });
+        });
+    </script>
+</body>
+</html>
